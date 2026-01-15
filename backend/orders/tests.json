@@ -1,0 +1,39 @@
+{
+  "tests": [
+    {
+      "name": "Create order",
+      "method": "POST",
+      "path": "/",
+      "body": {
+        "user_id": 1,
+        "service_type": "sober_driver",
+        "pickup_address": "Москва, ул. Ленина 1",
+        "destination_address": "Москва, ул. Пушкина 10",
+        "pickup_time": "2024-12-31T20:00:00",
+        "city": "Москва",
+        "notes": "Звонить за 10 минут"
+      },
+      "expectedStatus": 201,
+      "expectedBody": {
+        "success": true,
+        "order": {
+          "id": "number",
+          "service_type": "string",
+          "status": "string"
+        }
+      },
+      "bodyMatcher": "partial"
+    },
+    {
+      "name": "Get user orders",
+      "method": "GET",
+      "path": "/?user_id=1",
+      "expectedStatus": 200,
+      "expectedBody": {
+        "success": true,
+        "orders": "array"
+      },
+      "bodyMatcher": "partial"
+    }
+  ]
+}

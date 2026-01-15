@@ -1,8 +1,26 @@
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import Icon from '@/components/ui/icon';
+import AuthDialog from '@/components/AuthDialog';
+import { authService } from '@/lib/auth';
 
 export default function HeroSection() {
+  const navigate = useNavigate();
+  const [showAuthDialog, setShowAuthDialog] = useState(false);
+
+  const handleOrderClick = () => {
+    if (authService.isAuthenticated()) {
+      navigate('/dashboard');
+    } else {
+      setShowAuthDialog(true);
+    }
+  };
+
+  const handleAuthSuccess = () => {
+    navigate('/dashboard');
+  };
   return (
     <section className="relative pt-32 pb-20 overflow-hidden">
       <div className="absolute inset-0 bg-gradient-to-br from-primary/10 via-background to-secondary/10" />
@@ -15,11 +33,11 @@ export default function HeroSection() {
             Услуги трезвого водителя и перевозки автомобилей по всей России. Быстро, надёжно, профессионально.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button size="lg" className="text-lg px-8 py-6">
+            <Button size="lg" className="text-lg px-8 py-6" onClick={handleOrderClick}>
               <Icon name="PhoneCall" size={20} className="mr-2" />
               Заказать сейчас
             </Button>
-            <Button size="lg" variant="outline" className="text-lg px-8 py-6">
+            <Button size="lg" variant="outline" className="text-lg px-8 py-6" onClick={handleOrderClick}>
               <Icon name="Calculator" size={20} className="mr-2" />
               Рассчитать стоимость
             </Button>
@@ -43,6 +61,12 @@ export default function HeroSection() {
           ))}
         </div>
       </div>
+
+      <AuthDialog 
+        open={showAuthDialog} 
+        onOpenChange={setShowAuthDialog}
+        onSuccess={handleAuthSuccess}
+      />
     </section>
   );
 }
